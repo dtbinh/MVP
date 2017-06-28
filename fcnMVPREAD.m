@@ -101,12 +101,12 @@ end
 d = 0;
 j = 0;
 while(d~=2)
-    j = j+1;
     ch = fscanf(fp,'%c',1);
     if(ch=='"')
-       d = d+1;
+        d = d+1;
     else
-       geomTypeROTOR(j) = ch;
+        j = j+1;
+        geomTypeROTOR(j) = ch;
     end
 end
 
