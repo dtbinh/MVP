@@ -1,5 +1,4 @@
 clear,clc
-
 strFILE = 'inputs/SkyRangerTMotor.txt';
 
 % variables - atmospheric, component geometries, component masses
@@ -25,15 +24,17 @@ strFILE = 'inputs/SkyRangerTMotor.txt';
 % orientations (1-leading vs 2-leading)
 
 % START VELOCITY SEQUENCE
+for i = 1:size(seqV,1)
+    flowV = seqV(i);  
+    
+    % Calculate the drag of each component
+    [powerPARASITIC, dragVEHICLE, dragARM, dragLEG, dragBODY, dragMOTOR,...
+        dragPAYLOAD] = fcnDRAGPREDICT(geomNumROTORS, flowV, flowRHO, ...
+        flowMU, cylinderRE, cylinderCDY, sphereRE, sphereCDY, areaARM, ...
+        areaLEG, areaMOTOR, areaPAYLOAD, areaBODY, geomARMradius, ...
+        geomLEGradius, geomMOTORradius, geomPAYLOADradius, geomBODYradius);
 
-% fcnDRAG
-%   output:Dpar_tot plus component drag values for moment function
-%   new output variables: dragVECHICLE, dragARM, dragLEG, dragBODY,
-%   dragMOTOR, dragPAYLOAD, powerPARASITIC
-
-
-
-
+end
 
 % fcnFORCETRIM
 %   input:  dragVEHICLE -|
