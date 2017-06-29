@@ -25,7 +25,7 @@ for k=1:Num
     % Add angle to table and combine all database tables
     temp1 = load(strcat('rotors/',geomTypeROTOR,'/',D(k).name));
     tempCELL(k) = struct2cell(temp1(1));
-    alpha = str2double(filename(k,1))*ones(size(tempCELL{k},1),1); % cr
+    alpha = str2double(filename(k,1))*ones(size(tempCELL{k},1),1); 
     alpha = table(alpha,'VariableNames',{'alpha'});
     d = tempCELL{k};
     temp2 = [d,alpha]; % Add alpha to appropiate table
