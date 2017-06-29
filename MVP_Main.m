@@ -20,8 +20,8 @@ strFILE = 'inputs/SkyRangerTMotor.txt';
     geomARMradius, geomBODYradius, geomPAYLOADradius, geomPAYLOADlength,...
     geomMOTORradius, geomMOTORheight);
 
-% setup component coordinates - variable rotor number for various
-% orientations (1-leading vs 2-leading)
+% Create a table with all rotor performance from database
+[tabLOOKUP, vecANGLELST] = fcnLOADTABLES(geomTypeROTOR);
 
 % START VELOCITY SEQUENCE
 for i = 1:size(seqV,1)
@@ -33,7 +33,6 @@ for i = 1:size(seqV,1)
         flowMU, cylinderRE, cylinderCDY, sphereRE, sphereCDY, areaARM, ...
         areaLEG, areaMOTOR, areaPAYLOAD, areaBODY, geomARMradius, ...
         geomLEGradius, geomMOTORradius, geomPAYLOADradius, geomBODYradius);
-
 end
 
 % fcnFORCETRIM
