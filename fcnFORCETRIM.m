@@ -7,6 +7,33 @@ function [ rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
 % This function determines the thrust and pitch attitude required to
 % maintain the multirotor vehicle in force equilibrium. 
 
+% INPUTS
+%   flowq       - dynamic pressure
+%   flowRHO     - density at altitude
+%   numrotors   - number of rotors
+%   geomBODYradius - radius of central body
+%   dragVEHICLE - parasitic drag calculated from fcnDRAGPREDICT
+%   massVEHICLE - total mass
+%   tabLOOKUP   - rotor data in lookup table form
+%   vecANGLST   - list of angle of attacks available from rotor data
+
+% OUTPUTS
+%     rotorTHRUST   - for each rotor    
+%     rotorRPM      - ""   
+%     rotorPx       - ""
+%     rotorPy       - ""    
+%     rotorMx       - ""  
+%     rotorMy       - ""   
+%     rotorCP       - ""   
+%     rotorCMx      - ""    
+%     rotorJinf     - ""   
+%     rotorAngINFLOW  - ""
+%     rotorVelINFLOW  - ""
+%     pitchVEHICLEdeg - vehicle pitch in degrees
+%     dragBODYinduced - induced drag of body based on lift & pitch
+%     liftBODY      - lift of body
+
+
     valWEIGHT       = massVEHICLE*9.81;                  % Vehicle weight - value
         
     tempPITCHdeg    = atand(dragVEHICLE/(valWEIGHT)); % First guess pitch - value
@@ -42,6 +69,6 @@ function [ rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
     rotorAngINFLOW  = repmat(valPITCHdeg_out, 1, 1, numrotors);
     rotorVelINFLOW  = repmat(sqrt(flowq/(0.5*flowRHO)), 1, 1, numrotors);
     pitchVEHICLEdeg = valPITCHdeg_out; % pitch of the vehicle based on equilibrium
-    
+
 end
 
