@@ -23,6 +23,8 @@ for i = 1:length(vecRPM)
     vecCP(i) = interp1(tempq,tempCP,flowq)';
     vecCMx(i) = interp1(tempq,tempCMx,flowq)';
     vecJinf(i) = interp1(tempq,tempJinf,flowq)';
+
+
 end
 
 tempCURVE=polyfit(vecTHRUST,vecRPM',2);
@@ -30,7 +32,7 @@ tempCURVE=polyfit(vecTHRUST,vecRPM',2);
 valRPM=tempCURVE(1)*valTHRUSTrho^2+tempCURVE(2)*valTHRUSTrho+tempCURVE(3);
 
 % interpolate rest of variables
-valPx_rho=interp1(vecRPM',vecPx,valRPM,'linear');
+valPx_rho=interp1(vecRPM,vecPx',valRPM,'linear');
 valPy_rho=interp1(vecRPM',vecPy,valRPM,'linear');
 valMx_rho=interp1(vecRPM',vecMx,valRPM,'linear');
 valMy_rho=interp1(vecRPM',vecMy,valRPM,'linear');
