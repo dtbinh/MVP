@@ -7,7 +7,7 @@ Payload type:
 
 Please note that the program uses equal, number,", and : signs as special recognizers!
 
-Flow Velocity (m/s)						seqV		= 1 2 3 4 5
+Flow Velocity (m/s)						seqV		= 0 1 2 3 4 5
 
 Atmospheric Conditions
 ----------------------
