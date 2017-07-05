@@ -32,13 +32,13 @@ tempCURVE=polyfit(vecTHRUST,vecRPM',2);
 valRPM=tempCURVE(1)*valTHRUSTrho^2+tempCURVE(2)*valTHRUSTrho+tempCURVE(3);
 
 % interpolate rest of variables
-valPx_rho=interp1(vecRPM,vecPx',valRPM,'linear');
-valPy_rho=interp1(vecRPM',vecPy,valRPM,'linear');
-valMx_rho=interp1(vecRPM',vecMx,valRPM,'linear');
-valMy_rho=interp1(vecRPM',vecMy,valRPM,'linear');
-valCP=interp1(vecRPM',vecCP,valRPM,'pchip');
-valCMx=interp1(vecRPM',vecCMx,valRPM,'linear');
-valJinf=interp1(vecRPM',vecJinf,valRPM,'linear');
+valPx_rho=interp1(vecRPM,vecPx',valRPM,'linear','extrap');
+valPy_rho=interp1(vecRPM',vecPy,valRPM,'linear','extrap');
+valMx_rho=interp1(vecRPM',vecMx,valRPM,'linear','extrap');
+valMy_rho=interp1(vecRPM',vecMy,valRPM,'linear','extrap');
+valCP=interp1(vecRPM',vecCP,valRPM,'pchip','extrap');
+valCMx=interp1(vecRPM',vecCMx,valRPM,'linear','extrap');
+valJinf=interp1(vecRPM',vecJinf,valRPM,'linear','extrap');
 
 
 end
