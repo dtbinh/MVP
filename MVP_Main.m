@@ -22,6 +22,10 @@ strFILE = 'inputs/SkyRangerTMotor.txt';
 
 % Create a table with all rotor performance from database
 [tabLOOKUP, vecANGLELST] = fcnLOADTABLES(geomTypeROTOR);
+rotorHUBLOCATIONS = [-0.4020         0   -0.0315;
+         0   -0.4020   -0.0315;
+    0.4020         0   -0.0315;
+         0    0.4020   -0.0315];
 
 % START VELOCITY SEQUENCE
 for i = 1:size(seqV,1)
@@ -33,11 +37,13 @@ for i = 1:size(seqV,1)
         areaLEG, areaMOTOR, areaPAYLOAD, areaBODY, geomARMradius, ...
         geomLEGradius, geomMOTORradius, geomPAYLOADradius, geomBODYradius);
     
-    [ rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
+    [rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
             rotorRPM, rotorPx, rotorPy, rotorMx, rotorMy, ...
             rotorCP, rotorCMx, rotorJinf, dragBODYinduced, liftBODY,...
             pitchVEHICLEdeg] = fcnFORCETRIM( flowq, flowRHO, geomNumROTORS, ...
             geomBODYradius, dragVEHICLE, massVEHICLE, tabLOOKUP, vecANGLELST );
+        
+        [vi_int,vi_self,skewRAD,wi] = fcnPREDICTRPM(geomDIAMETER,geomNumBLADES,rotorHUBLOCATIONS,rotorTHRUST,rotorAngINFLOW,rotorVelINFLOW,flowRHO,rotorRPM,geomNumROTORS);
 end
 
 % fcnFORCETRIM
