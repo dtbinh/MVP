@@ -1,6 +1,7 @@
 function [wi] = VortRingV(nowakes,noseg,noblades,zoff_1,skewRAD,R,circulation,pointInterest,po)
 % Vectorize version of the original VortRing
 
+
 vecANG1 = (0:2*pi/noseg:(2*pi-2*pi/noseg))'; % Angles for each segment first node
 vecANG2 = (2*pi/noseg:2*pi/noseg:2*pi)'; % Angles for each segment second node
 
@@ -34,12 +35,14 @@ matSEG2 = [tempX, tempY, tempZ];
 
 
 % TESTING PLOT - ring centers 
+% figure(1)
 % hold on
 % for i = 1:size(ringCENTER,3)
 %     scatter3(ringCENTER(:,1,i),ringCENTER(:,2,i),ringCENTER(:,3,i))
-%     %scatter3(matSEG(1:noseg,1,i),matSEG(1:noseg,2,i),matSEG(1:noseg,3,i))
+% %     scatter3(matSEG(1:noseg,1,i),matSEG(1:noseg,2,i),matSEG(1:noseg,3,i))
 %     scatter3(matSEG1(:,1,i),matSEG1(:,2,i),matSEG1(:,3,i))
-%     scatter3(tempX(:,1,i),tempY(:,1,i),tempZ(:,1,i))
+% %     scatter3(tempX(:,1,i),tempY(:,1,i),tempZ(:,1,i))
 % end
+% plot3(-0.112,0.3,-0.0315, 'xr')
 end
 

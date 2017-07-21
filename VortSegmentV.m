@@ -29,7 +29,7 @@ product = cross(r1,r2,2);
 norm_product = sqrt(product(:,1,:).^2+product(:,2,:).^2+product(:,3,:).^2);
 
 d = norm_product./norm_r0;
-
+% % %
 % A is angle between r1 and line segment
     cosA = dot(r0,r1,2)./(norm_r0.*norm_r1); 
 % B is angle between r2 and line segment
@@ -40,12 +40,12 @@ qtheta = -permute(circulation,[1 3 2])./(4*pi.*d).*(cosA-cosB);
 
 tempwi = product.*(repmat(qtheta,1,3,1)) ./ (repmat(norm_product,1,3,1));
 
-for i = 1:size(pointInterest,1)
-    %multiplies first ring by number of blades to account for full
-    %circulation of a ring in each of the rotor planes
-    tempwi(((i-1)*noseg*(nowakes+1)+1):((i-1)*noseg*(nowakes+1)+1)+noseg-1,:,:) ...
-        = tempwi(((i-1)*noseg*(nowakes+1)+1):((i-1)*noseg*(nowakes+1)+1)+noseg-1,:,:).*noblades;
-end
+% for i = 1:size(pointInterest,1)
+%     %multiplies first ring by number of blades to account for full
+%     %circulation of a ring in each of the rotor planes
+%     tempwi(((i-1)*noseg*(nowakes+1)+1):((i-1)*noseg*(nowakes+1)+1)+noseg-1,:,:) ...
+%         = tempwi(((i-1)*noseg*(nowakes+1)+1):((i-1)*noseg*(nowakes+1)+1)+noseg-1,:,:).*noblades;
+% end
 
 d2 = d.*d;
 idx = (d2>=10^(-10));

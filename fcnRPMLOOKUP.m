@@ -1,4 +1,7 @@
-function [ rotorRPM, rotorPx, rotorPy, rotorMx, rotorMy, rotorCP, rotorCMx, rotorJinf ] = fcnRPMLOOKUP( flowq, flowRHO, valPITCHdeg, valTHRUSTrho, tabLOOKUP, vecANGLELST )
+function [ rotorRPM, rotorPx, rotorPy, rotorMx, rotorMy, rotorCP, ...
+            rotorCMx, rotorJinf ] = fcnRPMLOOKUP( flowq, flowRHO, ...
+            valPITCHdeg, valTHRUSTrho, tabLOOKUP, vecANGLELST )
+
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
