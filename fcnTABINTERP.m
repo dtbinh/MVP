@@ -5,15 +5,15 @@ function [ valRPM, valPx_rho, valPy_rho, valMx_rho, valMy_rho, valCP, valCMx, va
 
 % interpolate for everything based on q and T
 for i = 1:length(vecRPM)
-    tempTHRUST = tabLOOKUP.Thrust_rho((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempq = tabLOOKUP.q((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempPx = tabLOOKUP.Px_rho((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempPy = tabLOOKUP.Py_rho((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempMx = tabLOOKUP.Mx_rho((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempMy = tabLOOKUP.My_rho((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempCP = tabLOOKUP.CP((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempCMx = tabLOOKUP.CM((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
-    tempJinf = tabLOOKUP.Jinf((tabLOOKUP.RPM(tabLOOKUP.alpha == alpha)) == vecRPM(i));
+    tempTHRUST = tabLOOKUP.Thrust_rho(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempq = tabLOOKUP.q(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempPx = tabLOOKUP.Px_rho(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempPy = tabLOOKUP.Py_rho(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempMx = tabLOOKUP.Mx_rho(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempMy = tabLOOKUP.My_rho(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempCP = tabLOOKUP.CP(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempCMx = tabLOOKUP.CM(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
+    tempJinf = tabLOOKUP.Jinf(tabLOOKUP.alpha == alpha & tabLOOKUP.RPM == vecRPM(i));
     
     vecTHRUST(i) = interp1(tempq,tempTHRUST,flowq)';
     vecPx(i) = interp1(tempq,tempPx,flowq)';
@@ -32,7 +32,7 @@ tempCURVE=polyfit(vecTHRUST,vecRPM',2);
 valRPM=tempCURVE(1)*valTHRUSTrho^2+tempCURVE(2)*valTHRUSTrho+tempCURVE(3);
 
 % interpolate rest of variables
-valPx_rho=interp1(vecRPM,vecPx',valRPM,'linear','extrap');
+valPx_rho=interp1(vecRPM',vecPx,valRPM,'linear','extrap');
 valPy_rho=interp1(vecRPM',vecPy,valRPM,'linear','extrap');
 valMx_rho=interp1(vecRPM',vecMx,valRPM,'linear','extrap');
 valMy_rho=interp1(vecRPM',vecMy,valRPM,'linear','extrap');

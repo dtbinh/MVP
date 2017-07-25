@@ -30,7 +30,7 @@ rotorHUBLOCATIONS = [-0.4020         0   -0.0315;
 % START VELOCITY SEQUENCE
 for i = 1:size(seqV,1)
     flowV = seqV(i);  
-    flowq = flowV^2*0.5*flowRHO;    % Calculate the drag of each component
+    flowq = 0.5*flowRHO*flowV^2;    % Calculate the drag of each component
     
     [powerPARASITIC, dragVEHICLE, dragARM, dragLEG, dragBODY, dragMOTOR,...
             dragPAYLOAD] = fcnDRAGPREDICT(geomNumROTORS, flowV, flowRHO, ...
