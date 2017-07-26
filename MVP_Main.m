@@ -58,9 +58,13 @@ for i = 1:size(seqV,1)
     [powerROTOR, powerTOTAL, powerVEHICLE] = fcnROTORPOWER (flowRHO, geomDIAMETER,...
                 geomNumROTORS, rotorCP, rotorRPM, powerPARASITIC);
       
-            
-            
-
+     %varify COORDSETUP function
+     %add moment function       
+     %add moment trim
+     %add Px convergence(from last time step)
+     %make new lookup function to find thrust based on RPM
+     %make file that generates plots
+     %validate WIM
 end
 
 % fcnFORCETRIM
