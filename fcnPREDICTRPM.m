@@ -1,5 +1,5 @@
 function [vi_int,vi_self,skewRAD,wi,...
-            rotorAngINFLOW, rotorVelINFLOW, rotorRPM_new, rotorPx, rotorPy,...
+            rotorAngINFLOW, rotorVelINFLOW, rotorRPM, rotorPx, rotorPy,...
             rotorMx, rotorMy, rotorCP, rotorCMx, rotorJinf] = fcnPREDICTRPM(flowq,flowRHO,geomNumROTORS,...
             geomNumBLADES,geomDIAMETER,rotorHUBLOCATIONS,rotorTHRUST,rotorRPM,...
             rotorAngINFLOW,rotorVelINFLOW, pitchVEHICLEdeg, tabLOOKUP,vecANGLST)
@@ -23,18 +23,19 @@ function [vi_int,vi_self,skewRAD,wi,...
 while errorsum(end) > 0.000001
 count = count +1
 
-    % vi_int, vi_self...verified with old code
+% vi_int, vi_self...verified with old code
     [vi_int,vi_self,skewRAD,wi] = fcnWIM(flowRHO,geomNumROTORS,geomNumBLADES,geomDIAMETER,rotorHUBLOCATIONS,rotorTHRUST,rotorRPM,vecPITCHdeg,vecFREE);
 
     
     [rotorAngINFLOW, rotorVelINFLOW, rotorRPM_new, rotorPx, rotorPy, rotorMx, rotorMy, rotorCP, rotorCMx, rotorJinf] ...
-     = fcnRPMUPDATE (flowq, flowRHO, vi_int(:,3,:), geomNumROTORS, rotorTHRUST, pitchVEHICLEdeg, tabLOOKUP, vecANGLST);
+        = fcnRPMUPDATE (flowq, flowRHO, vi_int(:,3,:), geomNumROTORS, rotorTHRUST, pitchVEHICLEdeg, tabLOOKUP, vecANGLST);
 
   
-            error                   = rotorRPM_new-rotorRPM;
-          errorsum                  = sum(abs(error));
-        % rpm reassign to final variable/variable used in next loop
-            rotorRPM                = rotorRPM_new;
+    error                   = rotorRPM_new-rotorRPM;
+    errorsum                  = sum(abs(error));
+        
+% rpm reassign to final variable/variable used in next loop
+    rotorRPM                = rotorRPM_new;
 
 end
  

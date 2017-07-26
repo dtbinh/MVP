@@ -1,6 +1,5 @@
 function [ rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
-            rotorRPM, rotorPx, rotorPy, rotorMx, rotorMy, ...
-            rotorCP, rotorCMx, rotorJinf, dragBODYinduced, liftBODY,...
+            rotorRPM, dragBODYinduced, liftBODY,...
             pitchVEHICLEdeg] = fcnFORCETRIM( flowq, flowRHO, numrotors, ...
             geomBODYradius, dragVEHICLE, massVEHICLE, tabLOOKUP, vecANGLELST )
 
@@ -59,16 +58,20 @@ function [ rotorTHRUST, rotorAngINFLOW, rotorVelINFLOW,...
     % function for each rotor on the vehicle.
     rotorTHRUST     = repmat(rotorTHRUST, 1, 1, numrotors);
     rotorRPM        = repmat(rotorRPM, 1, 1, numrotors);
-    rotorPx         = repmat(rotorPx, 1, 1, numrotors);
-    rotorPy         = repmat(rotorPy, 1, 1, numrotors);    
-    rotorMx         = repmat(rotorMx, 1, 1, numrotors);    
-    rotorMy         = repmat(rotorMy, 1, 1, numrotors);    
-    rotorCP         = repmat(rotorCP, 1, 1, numrotors);
-    rotorCMx        = repmat(rotorCMx, 1, 1, numrotors);
-    rotorJinf       = repmat(rotorJinf, 1, 1, numrotors);
     rotorAngINFLOW  = repmat(valPITCHdeg_out, 1, 1, numrotors);
     rotorVelINFLOW  = repmat(sqrt(flowq/(0.5*flowRHO)), 1, 1, numrotors);
     pitchVEHICLEdeg = valPITCHdeg_out; % pitch of the vehicle based on equilibrium
 
+    
+%     rotorPx         = repmat(rotorPx, 1, 1, numrotors);
+%     rotorPy         = repmat(rotorPy, 1, 1, numrotors);    
+%     rotorMx         = repmat(rotorMx, 1, 1, numrotors);    
+%     rotorMy         = repmat(rotorMy, 1, 1, numrotors);    
+%     rotorCP         = repmat(rotorCP, 1, 1, numrotors);
+%     rotorCMx        = repmat(rotorCMx, 1, 1, numrotors);
+%     rotorJinf       = repmat(rotorJinf, 1, 1, numrotors);
+
+    
+    
 end
 
