@@ -19,50 +19,56 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
   % forces that rotate based on pitch attitude
   
   % preallocate for number of rotors
-        momentROTORTHRUST   = zeros(geomNumROTORS,3);
-        momentROTORPx       = zeros(geomNumROTORS,3);
-        momentROTORPy       = zeros(geomNumROTORS,3);
-        momentROTORMx       = zeros(geomNumROTORS,3);
-        momentROTORMy       = zeros(geomNumROTORS,3);
-        momentWEIGHTMOTOR   = zeros(geomNumROTORS,3);
-        momentWEIGHTARM     = zeros(geomNumROTORS,3);
-        momentDRAGMOTOR     = zeros(geomNumROTORS,3);
-        momentDRAGARM       = zeros(geomNumROTORS,3);
-        momentWEIGHTLEG     = zeros(4,3);
-        momentDRAGLEG     = zeros(4,3);
+        momentROTORTHRUST   = zeros(1,3,geomNumROTORS);
+        momentROTORPx       = zeros(1,3,geomNumROTORS);
+        momentROTORPy       = zeros(1,3,geomNumROTORS);
+        momentROTORMx       = zeros(1,3,geomNumROTORS);
+        momentROTORMy       = zeros(1,3,geomNumROTORS);
+        momentWEIGHTMOTOR   = zeros(1,3,geomNumROTORS);
+        momentWEIGHTARM     = zeros(1,3,geomNumROTORS);
+        momentDRAGMOTOR     = zeros(1,3,geomNumROTORS);
+        momentDRAGARM       = zeros(1,3,geomNumROTORS);
+        momentWEIGHTLEG     = zeros(1,3,4);
+        momentDRAGLEG     = zeros(1,3,4);
     
     for i = 1:geomNumROTORS
-        momentROTORTHRUST(i,1:3) = cross(rotpositionROTOR(i,:),[0,0,rotorTHRUST(i)]*matROTATEVEHICLE,2);
-        momentROTORPx(i,1:3) = cross(rotpositionROTOR(i,:),[rotorPx(i),0,0]*matROTATEVEHICLE,2);
-        momentROTORPy(i,1:3) = cross(rotpositionROTOR(i,:),[0,rotorPy(i),0]*matROTATEVEHICLE,2);
-        momentROTORMx(i,1:3) = [rotorMx(i),0,0];
-        momentROTORMy(i,1:3) = [0,-rotorMy(i),0];
-        momentWEIGHTMOTOR(i,1:3) = cross(rotpositionMOTOR(i,:),[0,0,-massMOTOR*9.81],2);
-        momentWEIGHTARM(i,1:3) = cross(rotpositionARM(i,:),[0,0,-massARM*9.81],2);
-        momentDRAGMOTOR(i,1:3) = cross(rotpositionMOTOR(i,:),[dragMOTOR,0,0],2);
-        momentDRAGARM(i,1:3) = cross(rotpositionARM(i,:),[dragARM,0,0],2);
+        momentROTORTHRUST(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,0,rotorTHRUST(i)]*matROTATEVEHICLE,2);
+        momentROTORPx(:,1:3,i) = cross(rotpositionROTOR(i,:),[rotorPx(i),0,0]*matROTATEVEHICLE,2);
+        momentROTORPy(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,rotorPy(i),0]*matROTATEVEHICLE,2);
+        momentROTORMx(:,1:3,i) = [rotorMx(i),0,0];
+        momentROTORMy(:,1:3,i) = [0,-rotorMy(i),0];
+        momentWEIGHTMOTOR(:,1:3,i) = cross(rotpositionMOTOR(i,:),[0,0,-massMOTOR*9.81],2);
+        momentWEIGHTARM(:,1:3,i) = cross(rotpositionARM(i,:),[0,0,-massARM*9.81],2);
+        momentDRAGMOTOR(:,1:3,i) = cross(rotpositionMOTOR(i,:),[dragMOTOR,0,0],2);
+        momentDRAGARM(:,1:3,i) = cross(rotpositionARM(i,:),[dragARM,0,0],2);
     end
 
+    for i = 1:geomNumROTORS
+        moment2ROTORTHRUST(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,0,rotorTHRUST(i)]*matROTATEVEHICLE,2);
+        moment2ROTORPx(:,1:3,i) = cross(rotpositionROTOR(i,:),[rotorPx(i),0,0]*matROTATEVEHICLE,2);
+    end
+    
+    
 % set number of legs
     for i = 1:4
-        momentWEIGHTLEG(i,1:3) = cross(rotpositionLEG(i,:),[0,0,-massLEG*9.81],2);
-        momentDRAGLEG(i,1:3) = cross(rotpositionLEG(i,:),[dragLEG,0,0],2);
+        momentWEIGHTLEG(:,1:3,i) = cross(rotpositionLEG(i,:),[0,0,-massLEG*9.81],2);
+        momentDRAGLEG(:,1:3,i) = cross(rotpositionLEG(i,:),[dragLEG,0,0],2);
     end
 
 % forces that rotate based on flight path angle
-        momentWEIGHTBODY(1,1:3) = cross(rotpositionBODY(1,:),[0,0,-massBODY*9.81],2);
-        momentWEIGHTPAYLOAD(1,1:3) = cross(rotpositionPAYLOAD(1,:),[0,0,-massPAYLOAD*9.81],2);
-        momentDRAGBODY(1,1:3) = cross(rotpositionBODY(1,:),[dragBODY(1,:),0,0],2);  
-        momentDRAGPAYLOAD(1,1:3) = cross(rotpositionPAYLOAD(1,:),[dragPAYLOAD,0,0],2);
-        momentDRAGBODYinduced(1,1:3) = cross(rotpositionBODY(1,:),[dragBODYinduced,0,0],2);  
-        momentLIFTBODY(1,1:3) = cross(rotpositionBODY(1,:),[0,0,-liftBODY],2);
+        momentWEIGHTBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[0,0,-massBODY*9.81],2);
+        momentWEIGHTPAYLOAD(:,1:3,1) = cross(rotpositionPAYLOAD(1,:),[0,0,-massPAYLOAD*9.81],2);
+        momentDRAGBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[dragBODY(1,:),0,0],2);  
+        momentDRAGPAYLOAD(:,1:3,1) = cross(rotpositionPAYLOAD(1,:),[dragPAYLOAD,0,0],2);
+        momentDRAGBODYinduced(:,1:3,1) = cross(rotpositionBODY(1,:),[dragBODYinduced,0,0],2);  
+        momentLIFTBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[0,0,-liftBODY],2);
 
 % Calculate total moments
-momentTOTAL = sum(momentROTORTHRUST) + sum(momentROTORPx) + sum(momentROTORPy) + ...
-    sum(momentROTORMx) + sum(momentROTORMy) + sum(momentWEIGHTMOTOR) + sum(momentWEIGHTARM) + ...
-    sum(momentDRAGMOTOR) + sum(momentDRAGARM)+ sum(momentWEIGHTLEG) + sum(momentDRAGLEG) + ...
-    momentWEIGHTBODY + momentWEIGHTPAYLOAD + momentDRAGBODY + momentDRAGPAYLOAD + ...
-            momentLIFTBODY + momentDRAGBODYinduced;
+momentTOTAL = sum(momentROTORTHRUST(end,:,:),3) + sum(momentROTORPx(end,:,:),3) + sum(momentROTORPy(end,:,:),3) + ...
+    sum(momentROTORMx(end,:,:),3) + sum(momentROTORMy(end,:,:),3) + sum(momentWEIGHTMOTOR(end,:,:),3) + sum(momentWEIGHTARM(end,:,:),3) + ...
+    sum(momentDRAGMOTOR(end,:,:),3) + sum(momentDRAGARM(end,:,:),3)+ sum(momentWEIGHTLEG(end,:,:),3) + sum(momentDRAGLEG(end,:,:),3) + ...
+    momentWEIGHTBODY(end,:,:) + momentWEIGHTPAYLOAD(end,:,:) + momentDRAGBODY(end,:,:) + momentDRAGPAYLOAD(end,:,:) + ...
+    momentLIFTBODY(end,:,:) + momentDRAGBODYinduced(end,:,:);
       
       
       
