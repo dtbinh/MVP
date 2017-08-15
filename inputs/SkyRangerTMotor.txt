@@ -7,7 +7,7 @@ Payload type:
 
 Please note that the program uses equal, number,", and : signs as special recognizers!
 
-Flow Velocity (m/s)						seqV		= 1 2 3
+Flow Velocity (m/s)						seqV		=  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 
 Atmospheric Conditions
 ----------------------
@@ -29,7 +29,7 @@ Number of leading rotors (1 or 2):		numLEADROTOR= 1
 
 Rotor Geometry and Properties
 -----------------------------
-Rotor type: 							geomTypeROTOR	="TMotorPrediction30"
+Rotor type: 							geomTypeROTOR	="TMotor1Prediction2000"
 Number of rotors: 						geomNumROTORS 	= 4
 Rotor diameter [m]:						geomDIAMETER 	= 0.4572 (18")
 Number of blades:						geomNumBLADES 	= 2
@@ -37,18 +37,18 @@ Number of blades:						geomNumBLADES 	= 2
 
 Vehicle Geometry [m]
 ----------------
-Arm length: 							geomARMlength 	= 0.322 (scaled for 18" prop)
+Arm length: 							geomARMlength       = 0.28 (scaled for 18" prop)
 Arm radius: 							geomARMradius		= 0.01
 Body height (top face to bottom face):	geomBODYheight 		= 0.145
-Body radius (radius of top face):		geomBODYradius 		= 0.08
+Body radius (radius of top face):		geomBODYradius 		= 0.1
 Leg length: 							geomLEGlength 		= 0.295
 Leg radius:								geomLEGradius 		= 0.01
 Leg centre radius: 						geomLEGcentreradius	= 0.17916
-Leg centre height: 						geomLEGcentreheight	= 0.595
+Leg centre height: 						geomLEGcentreheight	= 0.1595
 Payload length: 						geomPAYLOADlength 	= 0.165
 Payload radius:							geomPAYLOADradius 	= 0.045
 Payload height (from origin to mid axis): geomPAYLOADheight = 0.19
-Motor height: 							geomMOTORheight 	= 0.02195
+Motor height: 							geomMOTORheight 	= 0.03
 Motor radius: 							geomMOTORradius 	= 0.02
 Rotor hub height (mid motor to mid rotor hub): geomHUBheight = 0.031475
 CG height (from origin to CG):			geomCGheight 		= 0.0275

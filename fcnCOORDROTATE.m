@@ -8,8 +8,8 @@ function [rotpositionROTOR, rotpositionMOTOR, rotpositionARM, rotpositionLEG,...
     rotpositionMOTOR = positionMOTOR*matROTATE;
     rotpositionARM = positionARM*matROTATE;
     rotpositionLEG = positionLEG*matROTATE;
-    rotpositionBODY = positionBODY*matROTATE;
-    rotpositionPAYLOAD = positionPAYLOAD;
+    rotpositionBODY = positionBODY(1,:)*matROTATE;
+    rotpositionPAYLOAD = positionPAYLOAD(1,:);
 
 
 end
