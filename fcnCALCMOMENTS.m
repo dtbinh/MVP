@@ -1,9 +1,9 @@
 function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momentROTORMy,...
             momentWEIGHTMOTOR, momentWEIGHTARM, momentDRAGMOTOR, momentDRAGARM, momentWEIGHTLEG,...
             momentDRAGLEG, momentWEIGHTBODY, momentWEIGHTPAYLOAD, momentDRAGBODY, momentDRAGPAYLOAD,...
-            momentLIFTBODY, momentDRAGBODYinduced, momentTOTAL] ...
-            = fcnCALCMOMENTS(massMOTOR, massARM, massLEG, massPAYLOAD, massBODY, ...
-            positionROTOR, positionMOTOR, positionARM, positionLEG, positionBODY, positionPAYLOAD,...
+            momentLIFTBODY, momentDRAGBODYinduced, momentWEIGHTOFFSET, momentTOTAL] ...
+            = fcnCALCMOMENTS(massMOTOR, massARM, massLEG, massPAYLOAD, massBODY, massOFFSET, ...
+            positionROTOR, positionMOTOR, positionARM, positionLEG, positionBODY, positionPAYLOAD,positionOFFSET,...
             dragVEHICLE, dragARM, dragLEG, dragBODY, dragMOTOR, dragPAYLOAD, dragBODYinduced, liftBODY, ...
             rotorTHRUST, rotorPx, rotorPy, rotorMx, rotorMy,pitchVEHICLEdeg, geomNumROTORS)
 
@@ -11,9 +11,9 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
 
     [matROTATEVEHICLE]      = fcnROTATE(0,pitchVEHICLEdeg,0); %pitch angle   
     [rotpositionROTOR, rotpositionMOTOR, rotpositionARM, rotpositionLEG,...
-        rotpositionBODY, rotpositionPAYLOAD] = fcnCOORDROTATE(positionROTOR, ...
+        rotpositionBODY, rotpositionPAYLOAD,rotpositionOFFSET] = fcnCOORDROTATE(positionROTOR, ...
         positionMOTOR, positionARM, positionLEG,...
-        positionBODY, positionPAYLOAD, matROTATEVEHICLE);  
+        positionBODY, positionPAYLOAD, positionOFFSET, matROTATEVEHICLE);  
 
   % variable number of rotors 
   % forces that rotate based on pitch attitude
@@ -30,12 +30,26 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
         momentDRAGARM       = zeros(1,3,geomNumROTORS);
         momentWEIGHTLEG     = zeros(1,3,4);
         momentDRAGLEG     = zeros(1,3,4);
-    
+        
+ 
+        
     for i = 1:geomNumROTORS
         momentROTORTHRUST(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,0,rotorTHRUST(i)]*matROTATEVEHICLE,2);
         momentROTORPx(:,1:3,i) = cross(rotpositionROTOR(i,:),[rotorPx(i),0,0]*matROTATEVEHICLE,2);
+        
+        
+        
+        % Rolling moments - CCW is +ve and CW is -ve
+        if i == 2 || i == 4 %if lead and 
+            rotorPy(i) = rotorPy(i);
+            momentROTORMx(:,1:3,i) = [-rotorMx(i),0,0];
+        else
+            rotorPy(i) = -rotorPy(i);
+            momentROTORMx(:,1:3,i) = [rotorMx(i),0,0];
+        end
+        
         momentROTORPy(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,rotorPy(i),0]*matROTATEVEHICLE,2);
-        momentROTORMx(:,1:3,i) = [rotorMx(i),0,0];
+        
         momentROTORMy(:,1:3,i) = [0,-rotorMy(i),0];
         momentWEIGHTMOTOR(:,1:3,i) = cross(rotpositionMOTOR(i,:),[0,0,-massMOTOR*9.81],2);
         momentWEIGHTARM(:,1:3,i) = cross(rotpositionARM(i,:),[0,0,-massARM*9.81],2);
@@ -56,20 +70,22 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
     end
 
 % forces that rotate based on flight path angle
-        momentWEIGHTBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[0,0,-massBODY*9.81],2);
-        momentWEIGHTPAYLOAD(:,1:3,1) = cross(rotpositionPAYLOAD(1,:),[0,0,-massPAYLOAD*9.81],2);
+        momentWEIGHTBODY(:,1:3) = cross(rotpositionBODY(1,:),[0,0,-massBODY*9.81],2);
+        momentWEIGHTPAYLOAD(:,1:3) = cross(rotpositionPAYLOAD(1,:),[0,0,-massPAYLOAD*9.81],2);
         momentDRAGBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[dragBODY(1,:),0,0],2);  
-        momentDRAGPAYLOAD(:,1:3,1) = cross(rotpositionPAYLOAD(1,:),[dragPAYLOAD,0,0],2);
-        momentDRAGBODYinduced(:,1:3,1) = cross(rotpositionBODY(1,:),[dragBODYinduced,0,0],2);  
-        momentLIFTBODY(:,1:3,1) = cross(rotpositionBODY(1,:),[0,0,-liftBODY],2);
+        momentDRAGPAYLOAD(:,1:3) = cross(rotpositionPAYLOAD(1,:),[dragPAYLOAD,0,0],2);
+        momentDRAGBODYinduced(:,1:3) = cross(rotpositionBODY(1,:),[dragBODYinduced,0,0],2);  
+        momentLIFTBODY(:,1:3) = cross(rotpositionBODY(1,:),[0,0,-liftBODY],2);
+      %%%%%%%%%%%%NEW%%%%%%%%%%%%%%%%
+        momentWEIGHTOFFSET(:,1:3) = cross(rotpositionOFFSET(1,:),[0,0,-massOFFSET*9.81],2);
 
 % Calculate total moments
 momentTOTAL = sum(momentROTORTHRUST(end,:,:),3) + sum(momentROTORPx(end,:,:),3) + sum(momentROTORPy(end,:,:),3) + ...
     sum(momentROTORMx(end,:,:),3) + sum(momentROTORMy(end,:,:),3) + sum(momentWEIGHTMOTOR(end,:,:),3) + sum(momentWEIGHTARM(end,:,:),3) + ...
     sum(momentDRAGMOTOR(end,:,:),3) + sum(momentDRAGARM(end,:,:),3)+ sum(momentWEIGHTLEG(end,:,:),3) + sum(momentDRAGLEG(end,:,:),3) + ...
-    momentWEIGHTBODY(end,:,:) + momentWEIGHTPAYLOAD(end,:,:) + momentDRAGBODY(end,:,:) + momentDRAGPAYLOAD(end,:,:) + ...
-    momentLIFTBODY(end,:,:) + momentDRAGBODYinduced(end,:,:);
-      
+    momentWEIGHTBODY(end,:) + momentWEIGHTPAYLOAD(end,:) + momentDRAGBODY(end,:) + momentDRAGPAYLOAD(end,:) + ...
+    momentLIFTBODY(end,:) + momentDRAGBODYinduced(end,:) +momentWEIGHTOFFSET(end,:);
+                                                                %%%%%%%%%%%%%%
       
       
 end

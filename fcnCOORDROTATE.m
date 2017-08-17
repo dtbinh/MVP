@@ -1,7 +1,7 @@
 function [rotpositionROTOR, rotpositionMOTOR, rotpositionARM, rotpositionLEG,...
-            rotpositionBODY, rotpositionPAYLOAD] = fcnCOORDROTATE(positionROTOR, ...
+            rotpositionBODY, rotpositionPAYLOAD,rotpositionOFFSET] = fcnCOORDROTATE(positionROTOR, ...
             positionMOTOR, positionARM, positionLEG,...
-            positionBODY, positionPAYLOAD, matROTATE)
+            positionBODY, positionPAYLOAD, positionOFFSET, matROTATE)
 
 
     rotpositionROTOR = positionROTOR*matROTATE;
@@ -10,6 +10,7 @@ function [rotpositionROTOR, rotpositionMOTOR, rotpositionARM, rotpositionLEG,...
     rotpositionLEG = positionLEG*matROTATE;
     rotpositionBODY = positionBODY(1,:)*matROTATE;
     rotpositionPAYLOAD = positionPAYLOAD(1,:);
+    rotpositionOFFSET = positionOFFSET*matROTATE;
 
 
 end

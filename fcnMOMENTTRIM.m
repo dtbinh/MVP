@@ -20,7 +20,7 @@ function [rotorTHRUST, rotorRPM, rotorPx, rotorPy, ...
 %
 % Moments recalculated.
 
-
+% CORRECT PITCHING MOMENT
 % LEAD ROTOR THRUST in DIAMOND CONFIG ONLY (CHECK)
 leadTHRUST = rotorTHRUST(:,:,1);
 rotorTHRUST(:,:,1) = leadTHRUST - momentTOTAL(1,2)/(2*norm(positionROTOR(1,:)));
@@ -28,6 +28,17 @@ rotorTHRUST(:,:,1) = leadTHRUST - momentTOTAL(1,2)/(2*norm(positionROTOR(1,:)));
 % TRAILING ROTOR THRUST in DIAMOND CONFIG ONLY (CHECK)
 rearTHRUST = rotorTHRUST(:,:,3);
 rotorTHRUST(:,:,3) = rearTHRUST + momentTOTAL(1,2)/(2*norm(positionROTOR(3,:)));
+
+  
+%CORRECT ROLL MOMENT
+%LEFT ROTOR THRUST in DIAMOND CONFIG ONLY
+leftTHRUST = rotorTHRUST(:,:,2);
+rotorTHRUST(:,:,2) = leftTHRUST + momentTOTAL(1,1)/(2*norm(positionROTOR(2,:)));
+    
+
+%RIGHT ROTOR THRUST in DIAMOND CONFIG ONLY
+rightTHRUST = rotorTHRUST(:,:,4);
+rotorTHRUST(:,:,4) = rightTHRUST - momentTOTAL(1,1)/(2*norm(positionROTOR(4,:)));
 
 rotorTHRUSTrho = rdivide(rotorTHRUST,flowRHO);
 
@@ -40,7 +51,7 @@ rotorTHRUSTrho = rdivide(rotorTHRUST,flowRHO);
             ( flowV, flowRHO, pitchVEHICLEdeg, ...
             rotorTHRUSTrho(:,:,j), tabLOOKUP, vecANGLELST );
     end
+
     
-
-
+    
 end
