@@ -37,10 +37,9 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
         momentROTORTHRUST(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,0,rotorTHRUST(i)]*matROTATEVEHICLE,2);
         momentROTORPx(:,1:3,i) = cross(rotpositionROTOR(i,:),[rotorPx(i),0,0]*matROTATEVEHICLE,2);
         
-        
-        
+                
         % Rolling moments - CCW is +ve and CW is -ve
-        if i == 2 || i == 4 %if lead and 
+        if i == 1 || i == 3 %if lead and 
             rotorPy(i) = rotorPy(i);
             momentROTORMx(:,1:3,i) = [-rotorMx(i),0,0];
         else
