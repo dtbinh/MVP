@@ -44,5 +44,7 @@ matSEG2 = [tempX, tempY, tempZ];
 % %     scatter3(tempX(:,1,i),tempY(:,1,i),tempZ(:,1,i))
 % end
 % plot3(-0.112,0.3,-0.0315, 'xr')
+
+
 end
 
