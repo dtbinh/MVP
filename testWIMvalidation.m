@@ -1,15 +1,15 @@
 % Rotor Ring Wake Test
 clear,clc
-
+% close all
 flowRHO = 1.225;
 geomNumROTORS = 1;
 geomNumBLADES = 2;
 geomDIAMETER = 0.4572;
 rotorHUBLOCATIONS = [0 0 0]; %10000 10000 10000; 10000 10000 10000; 10000 10000 10000];
-rotorTHRUST = 8.7;
+rotorTHRUST = 9;
 rotorRPM = 2600;
-vecPITCH = 12.378;
-vecFREE = 10;
+vecPITCH = 25.15;
+vecFREE = 15;
 
 
    
@@ -27,8 +27,8 @@ vecFREE = 10;
     i = 1;
     
 % Assign the rotor hubs as the points of interest
-for X = -0.6:0.15:0.6
-for Y = -0.6:0.15:0.6
+for X = -0.6:0.05:0.6
+for Y = -0.6:0.05:0.6
 pointInterest = [X Y 0];
     %% Calculate skew angle and z offset
     u_wake = (vecFREE.*cosd(vecPITCH));
@@ -54,23 +54,33 @@ pointInterest = [X Y 0];
 end
 end
     
-%% Plot 
+%% VAPTOR 
+ynew = -0.6:0.05:0.6;
+x = -0.6:0.05:0.6;
+RING = reshape(wi(:,3),[length(ynew),length(x)]);
 
-figure;
-hold on
-y = -0.6:0.15:0.6;
-x = -0.6:0.15:0.6;
-B = reshape(wi(:,3),[length(y),length(x)]);
-for i = 1:1:length(x)
-    plot(y,B(:,i))
-    xlabel('y')
-    ylabel('vint_z')
-    str = sprintf('x = %f',x(i));
+load('Julia2600rpmFFSEPT20.mat')
+
+%average the normal induced velocity by number of azimuth stations
+avg = mean(induced_vel1(:,3,:),3);
+
+VAPTOR = reshape(avg,[25,25]);
+
+%% PLOT
+for i = 1:3:length(ynew)
+    figure(i)
+    hold on
+    plot(ynew,RING(:,i),'g',ynew,VAPTOR(:,i),'k')
+    xlabel('rotor span in y-dir [m]')
+    ylabel('normal component of induced velocity [m/s]')
+    str = sprintf('x = %f',y(i));
     title(str);
 end
 
 %% Quiver Plot
 z = 0;
+y= ynew;
+x = ynew;
 [X,Y,Z]=meshgrid(x,y,z);
 X = X(:);
 Y = Y(:);
