@@ -1,0 +1,63 @@
+Input file for Multirotor Vehicle Performance Model
+Input file in m/N/secPayload
+
+Platform: 		SkyRanger
+Rotor type:		Hawk 15"
+Payload type:	HDZoom
+
+Please note that the program uses equal, number,", and : signs as special recognizers!
+
+Flow Velocity (m/s)						seqV		=  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+
+Atmospheric Conditions
+----------------------
+Temperature [K]:						flowTEMP 	= 	288.15
+Altitude [m]:							flowALT 	=	0
+Sea level density [kg/m3]:				flowRHO 	= 	1.225
+Dynamic viscosity:						flowMU		=	0.00001846
+M [kg/mol]: 							flowM 		= 	0.0289644
+R [J/mol*K]: 							flowR 		= 	8.314
+alpha_T [K/m]: 							flowALPHAT 	= 	0.006
+
+
+Flight Orientation
+------------------
+Climb angle [deg from x-y plane]:		angCLIMBdeg	= 0
+Wind side angle [deg within x-y plane]: angSIDEdeg = 0
+Number of leading rotors (1 or 2):		numLEADROTOR= 1
+
+
+Rotor Geometry and Properties
+-----------------------------
+Rotor type: 							geomTypeROTOR	="Hawk Prediction"
+Number of rotors: 						geomNumROTORS 	= 4
+Rotor diameter [m]:						geomDIAMETER 	= 0.381 (15")
+Number of blades:						geomNumBLADES 	= 2
+
+
+Vehicle Geometry [m]
+----------------
+Arm length: 							geomARMlength       = 0.2 (orginal length for 15" prop)
+Arm radius: 							geomARMradius		= 0.01
+Body height (top face to bottom face):	geomBODYheight 		= 0.145
+Body radius (radius of top face):		geomBODYradius 		= 0.1
+Leg length: 							geomLEGlength 		= 0.295
+Leg radius:								geomLEGradius 		= 0.01
+Leg centre radius: 						geomLEGcentreradius	= 0.17916
+Leg centre height: 						geomLEGcentreheight	= 0.1595
+Payload length: 						geomPAYLOADlength 	= 0.165
+Payload radius:							geomPAYLOADradius 	= 0.045
+Payload height (from origin to mid axis): geomPAYLOADheight = 0.19
+Motor height: 							geomMOTORheight 	= 0.03
+Motor radius: 							geomMOTORradius 	= 0.02
+Rotor hub height (mid motor to mid rotor hub): geomHUBheight = 0.031475
+CG height (from origin to CG):			geomCGheight 		= 0.0275
+
+Vehicle Component Masses [kg]				
+------------------------
+Motor mass: 							massMOTOR 	= 0.085
+Arm mass: 								massARM		= 0.063
+Leg mass: 								massLEG 	= 0.029
+Payload mass: 							massPAYLOAD	= 0.658
+Body mass; 								massBODY 	= 1.632
+Total vehicle mass:						massVEHICLE = 2.998
