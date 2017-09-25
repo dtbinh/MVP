@@ -1,4 +1,4 @@
-function [q_int_arrange] = fcnBODYINTERFERENCE(flowV, geomBODYradius, pitchVEHICLEdeg, positionROTOR)
+function [q_int_arrange] = fcnBODYINTERFERENCE(flowV, geomBODYradius, pitchVEHICLEdeg, positionROTOR, geomNumROTORS)
 
 flowLOCAL               = flowV;
 angALPHA                = 0;
@@ -45,10 +45,15 @@ mag_q_total     = sqrt(sum(abs(q_total).^2,2));
 q_int           = (q_total-repmat(flowGLOBAL,[size(rvecROTOR,1),1]))';
 
 % save answer in 1x3x4 
-q_int_arrange   = reshape(q_int, [1 3 4]);
+q_int_arrange   = reshape(q_int, [1 3 geomNumROTORS]);
 
 mag_q_int       = sqrt(sum(abs(q_int).^2,2));
 
+if flowV == 0
+    
+    q_int_arrange = zeros(1,3,geomNumROTORS);
+
+end
 
 
 %     figure(1)

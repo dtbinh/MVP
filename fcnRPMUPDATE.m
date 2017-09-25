@@ -1,5 +1,5 @@
 function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
-    rotorPxtest, rotorPytest, rotorMxtest, rotorMytest, rotorCPtest, rotorCMxtest, rotorJinftest, vi_int_rotbod] ...
+    rotorPxtest, rotorPytest, rotorMxtest, rotorMytest, rotorCPtest, rotorCMxtest, rotorJinftest, vi_int_rotbod,vi_z] ...
      = fcnRPMUPDATE (flowq, flowRHO, vecINT, geomNumROTORS, rotorTHRUST,...
      pitchVEHICLEdeg, vi_body, tabLOOKUP, vecANGLST)
  
@@ -41,8 +41,8 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
          Vint(:,1) = (vecINT.*sind(vecPITCH)); %Vx
         Vint(:,3) = (vecINT.*cosd(vecPITCH)); %Vz
         
-        vi_int = reshape(Vint', [1 3 4]);
-         vi_int_rotbod = vi_int;
+        vi_z = reshape(Vint', [1 3 geomNumROTORS]);
+         vi_int_rotbod = vi_z;
      else % all forward flight cases
          
 % upwash/induced angle deflects resultant velocity upwards from rotor plane reducing the inflow angle
@@ -56,20 +56,20 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
         % interference
         %vecINT is the z component of interference velocity through the
         %rotor. Here vecINT (z) is transposed into global plane
-        Vint(:,1) = (vecINT.*sind(vecPITCH)); %Vx
+        Vint(:,1) = (-vecINT.*sind(vecPITCH)); %Vx
         Vint(:,3) = (vecINT.*cosd(vecPITCH)); %Vz
         
-        vi_int = reshape(Vint', [1 3 4]); %1x3x4 structure for saving purposes
+        vi_z = reshape(Vint', [1 3 geomNumROTORS]); %1x3x4 structure for saving purposes
         
         vecFREEglobal = repmat([V 0 0], 1, 1, geomNumROTORS);
         
-        testVelTOTAL      = vecFREEglobal - vi_int + vi_body;
+        testVelTOTAL      = vecFREEglobal + vi_z + vi_body;
 
         testmagVelTOTAL   = sqrt(sum(abs(testVelTOTAL).^2,2)); % same results as vecVelNEW
-        magVelTOTAL  = reshape(testmagVelTOTAL, [1 1 4]);
+        magVelTOTAL  = reshape(testmagVelTOTAL, [1 1 geomNumROTORS]);
 %         testVelTOTAL        = testVelNEW + vi_body;
         
-        vi_int_rotbod = vi_body - vi_int;
+        vi_int_rotbod = vi_body + vi_z;
         
 
         
