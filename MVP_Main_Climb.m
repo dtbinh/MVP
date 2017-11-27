@@ -1,6 +1,8 @@
+%% MVP CLIMB
+
 clear,clc
 % close all
-strFILE = 'inputs/SkyRangerTMOTOR.txt';
+strFILE = 'inputs/SkyRangerTMotor.txt';
 
 % variables - atmospheric, component geometries, component masses
 [seqV, flowTEMP, flowALT, flowRHO, flowMU, flowM, flowR, flowALPHAT, ...

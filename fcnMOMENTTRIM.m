@@ -1,7 +1,8 @@
 function [rotorTHRUST, rotorRPM, rotorPx, rotorPy, ...
             rotorMx, rotorMy, rotorCP, rotorCMx, rotorJinf] ...
             = fcnMOMENTTRIM (rotorTHRUST, momentTOTAL, positionROTOR,...
-            flowV, flowRHO, pitchVEHICLEdeg, geomNumROTORS, tabLOOKUP, vecANGLELST)
+            flowV, flowRHO, pitchVEHICLEdeg, geomNumROTORS, tabLOOKUP, vecANGLELST,numLEADROTOR)
+
 % Force trim gives equal thrust to all rotors.
 %       ex. T1=T2=T3=T4
 %
@@ -20,6 +21,8 @@ function [rotorTHRUST, rotorRPM, rotorPx, rotorPy, ...
 %
 % Moments recalculated.
 
+%% DIAMOND CONFIGURATION
+if numLEADROTOR == 1 
 % CORRECT PITCHING MOMENT
 % LEAD ROTOR THRUST in DIAMOND CONFIG ONLY (CHECK)
 leadTHRUST = rotorTHRUST(:,:,1);
@@ -32,13 +35,13 @@ rotorTHRUST(:,:,3) = rearTHRUST + momentTOTAL(1,2)/(2*norm(positionROTOR(3,:)));
   
 %CORRECT ROLL MOMENT
 %LEFT ROTOR THRUST in DIAMOND CONFIG ONLY
-leftTHRUST = rotorTHRUST(:,:,2);
-rotorTHRUST(:,:,2) = leftTHRUST + momentTOTAL(1,1)/(2*norm(positionROTOR(2,:)));
-    
-
-%RIGHT ROTOR THRUST in DIAMOND CONFIG ONLY
-rightTHRUST = rotorTHRUST(:,:,4);
-rotorTHRUST(:,:,4) = rightTHRUST - momentTOTAL(1,1)/(2*norm(positionROTOR(4,:)));
+% leftTHRUST = rotorTHRUST(:,:,2);
+% rotorTHRUST(:,:,2) = leftTHRUST + momentTOTAL(1,1)/(2*norm(positionROTOR(2,:)));
+%     
+% 
+% %RIGHT ROTOR THRUST in DIAMOND CONFIG ONLY
+% rightTHRUST = rotorTHRUST(:,:,4);
+% rotorTHRUST(:,:,4) = rightTHRUST - momentTOTAL(1,1)/(2*norm(positionROTOR(4,:)));
 
 rotorTHRUSTrho = rdivide(rotorTHRUST,flowRHO);
 
@@ -52,6 +55,34 @@ rotorTHRUSTrho = rdivide(rotorTHRUST,flowRHO);
             rotorTHRUSTrho(:,:,j), tabLOOKUP, vecANGLELST );
     end
 
+%% SQUARE CONFIGURATIONS
+else%if numLEADROTOR == 2
+    % CORRECT PITCHING MOMENT
+% LEAD ROTOR THRUST in DIAMOND CONFIG ONLY (CHECK)
+leadTHRUST = rotorTHRUST(:,:,1);
+rotorTHRUST(:,:,1) = leadTHRUST - momentTOTAL(1,2)/(4*norm(positionROTOR(1,:)));
+rotorTHRUST(:,:,4) = leadTHRUST - momentTOTAL(1,2)/(4*norm(positionROTOR(4,:)));
+
+% TRAILING ROTOR THRUST in DIAMOND CONFIG ONLY (CHECK)
+rearTHRUST = rotorTHRUST(:,:,3);
+rotorTHRUST(:,:,2) = rearTHRUST + momentTOTAL(1,2)/(4*norm(positionROTOR(2,:)));
+rotorTHRUST(:,:,3) = rearTHRUST + momentTOTAL(1,2)/(4*norm(positionROTOR(3,:)));
+  
+
+rotorTHRUSTrho = rdivide(rotorTHRUST,flowRHO);
+
+    %lookup new variables
+    % Lookup new rotor data based on updated thrust
+    for j = 1:geomNumROTORS
+        [ rotorRPM(:,:,j), rotorPx(:,:,j), rotorPy(:,:,j), ...
+            rotorMx(:,:,j), rotorMy(:,:,j), rotorCP(:,:,j),...
+            rotorCMx(:,:,j), rotorJinf(:,:,j) ] = fcnRPMLOOKUP...
+            ( flowV, flowRHO, pitchVEHICLEdeg, ...
+            rotorTHRUSTrho(:,:,j), tabLOOKUP, vecANGLELST );
+    end
+end
+
+    
     
     
 end

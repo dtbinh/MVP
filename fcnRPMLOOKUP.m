@@ -18,9 +18,9 @@ vecRPMlow = unique(tabLOOKUP.RPM(tabLOOKUP.alpha == lowang)); %delete
 tempANGS = [ highang, lowang ];
 rotorRPM = interp1(tempANGS,valRPM,valPITCHdeg);
 rotorPx = -1*interp1(tempANGS,valPx_rho,valPITCHdeg)*flowRHO; % Px is negative in lookup tables but needs to be positive for convention
-rotorPy = interp1(tempANGS,valPy_rho,valPITCHdeg)*flowRHO;
-rotorMx = interp1(tempANGS,valMx_rho,valPITCHdeg)*flowRHO;
-rotorMy = interp1(tempANGS,valMy_rho,valPITCHdeg)*flowRHO;
+rotorPy = -1*interp1(tempANGS,valPy_rho,valPITCHdeg)*flowRHO;
+rotorMx = -1*interp1(tempANGS,valMx_rho,valPITCHdeg)*flowRHO;
+rotorMy = -1*interp1(tempANGS,valMy_rho,valPITCHdeg)*flowRHO;
 rotorCP = interp1(tempANGS,valCP,valPITCHdeg);
 rotorCMx = interp1(tempANGS,valCMx,valPITCHdeg);
 rotorJinf = interp1(tempANGS,valJinf,valPITCHdeg);

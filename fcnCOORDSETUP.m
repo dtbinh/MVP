@@ -1,7 +1,7 @@
 function [positionROTOR, positionMOTOR, positionARM, positionLEG,...
             positionBODY, positionPAYLOAD] = fcnCOORDSETUP(numLEADROTOR, geomNumROTORS,...
             geomARMlength, geomBODYradius, geomMOTORradius, geomLEGcentreradius, geomLEGcentreheight, ...
-            geomPAYLOADheight, geomHUBheight, geomCGheight)
+            geomPAYLOADheight, geomHUBheight, geomCGheight, geomCGoffset)
 %% COORDINATE SYSTEM
 %  Coordinate system for diamond configuration.
 %                            |y
@@ -25,22 +25,22 @@ function [positionROTOR, positionMOTOR, positionARM, positionLEG,...
 %% Moment arms per component
 %Rotor
 %Distance from origin to rotor hub
-    distROTORHUB = sqrt((geomARMlength + geomBODYradius + geomMOTORradius)^2+geomHUBheight^2);
-    distHUBHEIGHT = geomHUBheight;
+    distROTORHUB    = sqrt((geomARMlength + geomBODYradius + geomMOTORradius)^2+geomHUBheight^2);
+    distHUBHEIGHT   = geomHUBheight;
 %Arm
 %Distance from origin to centre of arm
-    distARMCENTRE = 0.5*geomARMlength+geomBODYradius;
+    distARMCENTRE   = 0.5*geomARMlength+geomBODYradius;
     
 %Motor
 %Distance from origin to centre of motor
     distMOTORCENTRE = geomARMlength + geomBODYradius + geomMOTORradius;
 
 %Leg
-    distLEGRADIAL = geomLEGcentreradius;
-    distLEGHEIGHT = geomLEGcentreheight;
+    distLEGRADIAL   = geomLEGcentreradius;
+    distLEGHEIGHT   = geomLEGcentreheight;
 
 %CG
-    distCG = geomCGheight;
+    distCGz          = geomCGheight;
     
 %PAYLOAD
     distPAYLOADHEIGHT = geomPAYLOADheight;
@@ -56,29 +56,29 @@ if numLEADROTOR == 1 % square
     positionPAYLOAD = zeros(geomNumROTORS,3);
     
      for i=1:geomNumROTORS
-            positionROTOR(i,1:3) = [-distMOTORCENTRE*cosd((i-1)*tempangARMS),-distMOTORCENTRE*sind((i-1)*tempangARMS),-distHUBHEIGHT]; %rotors labelled 1-4 ccw
-            positionMOTOR(i,1:3) = [-distMOTORCENTRE*cosd((i-1)*tempangARMS),-distMOTORCENTRE*sind((i-1)*tempangARMS),0]; %rotors labelled 1-4 ccw
-            positionARM(i,1:3) = [-distARMCENTRE*cosd((i-1)*tempangARMS),-distARMCENTRE*sind((i-1)*tempangARMS),0]; %rotors labelled 1-4 ccw
-            positionLEG(i,1:3) = [-distLEGRADIAL*cosd((i-1)*tempangARMS),-distLEGRADIAL*sind((i-1)*tempangARMS),-distLEGHEIGHT]; %rotors labelled 1-4 ccw
-            positionBODY(i,1:3) = [0,0,-distCG];
-            positionPAYLOAD(i,1:3) = [0,0,-distPAYLOADHEIGHT];
+            positionROTOR(i,1:3)    = [-distMOTORCENTRE*cosd((i-1)*tempangARMS),-distMOTORCENTRE*sind((i-1)*tempangARMS),-distHUBHEIGHT]; %rotors labelled 1-4 ccw
+            positionMOTOR(i,1:3)    = [-distMOTORCENTRE*cosd((i-1)*tempangARMS),-distMOTORCENTRE*sind((i-1)*tempangARMS),0]; %rotors labelled 1-4 ccw
+            positionARM(i,1:3)      = [-distARMCENTRE*cosd((i-1)*tempangARMS),-distARMCENTRE*sind((i-1)*tempangARMS),0]; %rotors labelled 1-4 ccw
+            positionLEG(i,1:3)      = [-distLEGRADIAL*cosd((i-1)*tempangARMS),-distLEGRADIAL*sind((i-1)*tempangARMS),-distLEGHEIGHT]; %rotors labelled 1-4 ccw
+            positionBODY(i,1:3)     = geomCGoffset; %xyz components of CG
+            positionPAYLOAD(i,1:3)  = [0,0,-distPAYLOADHEIGHT];
      end
     
 elseif numLEADROTOR == 2
     
-    positionROTOR = zeros(geomNumROTORS,1:3);
-    positionMOTOR = zeros(geomNumROTORS,1:3);
-    positionARM = zeros(geomNumROTORS,1:3);
-    positionLEG = zeros(geomNumROTORS,1:3);
-    positionBODY = zeros(geomNumROTORS,1:3);
-    positionPAYLOAD = zeros(geomNumROTORS,1:3);
+    positionROTOR = zeros(geomNumROTORS,3);
+    positionMOTOR = zeros(geomNumROTORS,3);
+    positionARM = zeros(geomNumROTORS,3);
+    positionLEG = zeros(geomNumROTORS,3);
+    positionBODY = zeros(geomNumROTORS,3);
+    positionPAYLOAD = zeros(geomNumROTORS,3);
     
     for i=1:geomNumROTORS
             positionROTOR(i,1:3) = [-distMOTORCENTRE*cosd((i-1)*tempangARMS+tempangARMS*0.5),-distMOTORCENTRE*sind((i-1)*tempangARMS+tempangARMS*0.5),-geomHUBheight]; %rotors labelled 1-4 ccw
             positionMOTOR(i,1:3) = [-distMOTORCENTRE*cosd((i-1)*tempangARMS+tempangARMS*0.5),-distMOTORCENTRE*sind((i-1)*tempangARMS+tempangARMS*0.5),0]; %rotors labelled 1-4 ccw
             positionARM(i,1:3) = [-distARMCENTRE*cosd((i-1)*tempangARMS+tempangARMS*0.5),-distARMCENTRE*sind((i-1)*tempangARMS+tempangARMS*0.5),0]; %rotors labelled 1-4 ccw
             positionLEG(i,1:3) = [-distLEGRADIAL*cosd((i-1)*tempangARMS+tempangARMS*0.5),-distLEGRADIAL*sind((i-1)*tempangARMS+tempangARMS*0.5),-distLEGHEIGHT]; %rotors labelled 1-4 ccw
-            positionBODY(i,1:3) = [0,0,-distCG];
+            positionBODY(i,1:3) = geomCGoffset;
             positionPAYLOAD(i,1:3) = [0,0,-distPAYLOADHEIGHT];
     end
         

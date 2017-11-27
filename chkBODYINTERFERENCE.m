@@ -5,7 +5,7 @@ geomBODYradius          = 0.08;
 geomBODYcentre = 0.0925;
 rb = geomBODYradius;
 h = geomBODYcentre;
-pitchVEHICLEdeg         = 12.3;
+pitchVEHICLEdeg         = 12.378;
 positionROTOR           = [...-rb, 0, -h; 
                             0, 0, -rb-h; ...bottom
                             ...rb, 0, -h; 
@@ -13,10 +13,10 @@ positionROTOR           = [...-rb, 0, -h;
                             0, -rb, -h; ...right
                             0, rb, -h]; ...left % point of interest
 
-% positionROTOR = [-0.4 0 -0.0315; 
-%                 0 -0.4 -0.0315; 
-%                 0.4 0 -0.0315; 
-%                 0 0.4 -0.0315]; 
+positionROTOR = [-0.4 0 -0.0315; 
+                0 -0.4 -0.0315; 
+                0.4 0 -0.0315; 
+                0 0.4 -0.0315]; 
                         
                         
 flowGLOBAL              = flowLOCAL*[cosd(angALPHA) sind(angBETA) sind(angALPHA)]; %DEGREES
@@ -61,20 +61,20 @@ q_int           = (q_total-repmat(flowGLOBAL,[size(rvecROTOR,1),1]))';
 
 % save answer in 1x3x4 
 q_int_arrange   = reshape(q_int, [1 3 4]);
-
+q_int_plot = q_int';
 mag_q_int       = sqrt(sum(abs(q_int).^2,2));
 
 
 
-    figure(1)
-    clf(1)
+    figure(2)
+    clf(2)
     hold on
     axis equal
     scatter3(rotpositionROTOR(:,1),rotpositionROTOR(:,2),rotpositionROTOR(:,3),'ro');
     [U,V,W] = meshgrid(q_total(:,1),q_total(:,2),q_total(:,3));
     plot3(rotpositionBODY (:,1),rotpositionBODY (:,2),rotpositionBODY (:,3),'bo');
      quiver3(rotpositionROTOR(:,1),rotpositionROTOR(:,2),rotpositionROTOR(:,3),q_total(:,1),q_total(:,2),q_total(:,3),'b')
-%      quiver3(rotpositionROTOR(:,1),roRpositionROTOR(:,2),rotpositionROTOR(:,3),q_int(1,:),q_int(2,:),q_int(3,:),'k')
+     quiver3(rotpositionROTOR(:,1),rotpositionROTOR(:,2),rotpositionROTOR(:,3),q_int_plot(:,1),q_int_plot(:,2),q_int_plot(:,3),'r')
 %     quiver3(rotpositionROTOR(:,1),rotpositionROTOR(:,2),rotpositionROTOR(:,3),repflowGLOBAL(:,1),repflowGLOBAL(:,2),repflowGLOBAL(:,3),'r')
 hold off
 

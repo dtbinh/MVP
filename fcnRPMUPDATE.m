@@ -1,8 +1,10 @@
 function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
-    rotorPxtest, rotorPytest, rotorMxtest, rotorMytest, rotorCPtest, rotorCMxtest, rotorJinftest, vi_int_rotbod,vi_z] ...
+    rotorPxtest, rotorPytest, rotorMxtest, rotorMytest, rotorCPtest, ...
+    rotorCMxtest, rotorJinftest, vi_int_rotbod,vi_z,...
+    vi_int_only, AngINT,magvi_int_only] ...
      = fcnRPMUPDATE (flowq, flowRHO, vecINT, geomNumROTORS, rotorTHRUST,...
      pitchVEHICLEdeg, vi_body, tabLOOKUP, vecANGLST)
- 
+ %%
      V              = sqrt(flowq/(0.5*flowRHO));
      vecFREE        = repmat (V, 1, 1, geomNumROTORS);              %freestream repeated for each rotor
      vecPITCH       = repmat(pitchVEHICLEdeg, 1, 1, geomNumROTORS); %pitch repeated for each rotor
@@ -15,7 +17,7 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
          rotorCPtest = zeros(1,1,geomNumROTORS);
          rotorCMxtest = zeros(1,1,geomNumROTORS);
          rotorJinftest = zeros(1,1,geomNumROTORS);
-     
+ %%    
      if V == 0 % hover case
      
          vecVelNEW = sqrt((vecFREE+vecINT.*sind(vecPITCH)).^2+(vecINT.*cosd(vecPITCH)).^2);
@@ -43,8 +45,13 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
         
         vi_z = reshape(Vint', [1 3 geomNumROTORS]);
          vi_int_rotbod = vi_z;
+         vi_int_only = vi_z;
+         AngINT = repmat (-90, 1, 1, geomNumROTORS);
+         magvi_int_only = magVelTOTAL;
+         
      else % all forward flight cases
          
+%% Forward Flight
 % upwash/induced angle deflects resultant velocity upwards from rotor plane reducing the inflow angle
         vecVelNEW = sqrt((vecFREE-(vecINT).*sind(vecPITCH)).^2+((vecINT).*cosd(vecPITCH)).^2); %McCormick 8.86? (propeller)   
         vecAngNEW = vecPITCH - asind((vecINT).*cosd(vecPITCH)./vecVelNEW); %use in tablelookup
@@ -59,8 +66,10 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
         Vint(:,1) = (-vecINT.*sind(vecPITCH)); %Vx
         Vint(:,3) = (vecINT.*cosd(vecPITCH)); %Vz
         
+        % mutual interference velocity in z-direction of rotor plane
         vi_z = reshape(Vint', [1 3 geomNumROTORS]); %1x3x4 structure for saving purposes
         
+        % Freestream
         vecFREEglobal = repmat([V 0 0], 1, 1, geomNumROTORS);
         
         testVelTOTAL      = vecFREEglobal + vi_z + vi_body;
@@ -71,11 +80,13 @@ function [testAngTOTAL, magVelTOTAL, rotorRPMtest, ...
         
         vi_int_rotbod = vi_body + vi_z;
         
-
+        vi_int_only     = vecFREEglobal + vi_z;
+        AngINT          = pitchVEHICLEdeg - atan2d(vi_int_only(:,3,:),vi_int_only(:,1,:));
+        magvi_int_only = reshape(sqrt(sum(abs(testVelTOTAL).^2,2)), [1 1 geomNumROTORS]);
         
         testflowqTOTAL      = 0.5*flowRHO*testmagVelTOTAL.^2;
 % %         testAngNEW          = pitchVEHICLEdeg + atan2d(testVelNEW(:,3,:),testVelNEW(:,1,:));
-        testAngTOTAL          = pitchVEHICLEdeg + atan2d(testVelTOTAL(:,3,:),testVelTOTAL(:,1,:));
+        testAngTOTAL          = pitchVEHICLEdeg - atan2d(testVelTOTAL(:,3,:),testVelTOTAL(:,1,:));
 %          AngTOTAL           = reshape(testAngTOTAL, [1 1 4]);
         
         % lookup new rotor performance data based on new inflow velocity and angle         

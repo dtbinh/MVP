@@ -1,7 +1,7 @@
 function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momentROTORMy,...
             momentWEIGHTMOTOR, momentWEIGHTARM, momentDRAGMOTOR, momentDRAGARM, momentWEIGHTLEG,...
             momentDRAGLEG, momentWEIGHTBODY, momentWEIGHTPAYLOAD, momentDRAGBODY, momentDRAGPAYLOAD,...
-            momentLIFTBODY, momentDRAGBODYinduced, momentWEIGHTOFFSET, momentTOTAL] ...
+            momentLIFTBODY, momentDRAGBODYinduced, momentWEIGHTOFFSET, momentTOTAL,rotorPy2] ...
             = fcnCALCMOMENTS(massMOTOR, massARM, massLEG, massPAYLOAD, massBODY, massOFFSET, ...
             positionROTOR, positionMOTOR, positionARM, positionLEG, positionBODY, positionPAYLOAD,positionOFFSET,...
             dragVEHICLE, dragARM, dragLEG, dragBODY, dragMOTOR, dragPAYLOAD, dragBODYinduced, liftBODY, ...
@@ -40,16 +40,16 @@ function [ momentROTORTHRUST, momentROTORPx, momentROTORPy, momentROTORMx, momen
                 
         % Rolling moments - CCW is +ve and CW is -ve
         if i == 1 || i == 3 %if lead and 
-            rotorPy(i) = rotorPy(i);
-            momentROTORMx(:,1:3,i) = [-rotorMx(i),0,0];
+            rotorPy2(i) = -rotorPy(i);
+            momentROTORMx(:,1:3,i) = [-rotorMx(i),0,0]; % CCW is +ve Py
         else
-            rotorPy(i) = -rotorPy(i);
-            momentROTORMx(:,1:3,i) = [rotorMx(i),0,0];
+            rotorPy2(i) = rotorPy(i);
+            momentROTORMx(:,1:3,i) = [rotorMx(i),0,0]; %CW
         end
         
-        momentROTORPy(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,rotorPy(i),0]*matROTATEVEHICLE,2);
+        momentROTORPy(:,1:3,i) = cross(rotpositionROTOR(i,:),[0,rotorPy2(i),0]*matROTATEVEHICLE,2);
         
-        momentROTORMy(:,1:3,i) = [0,-rotorMy(i),0];
+        momentROTORMy(:,1:3,i) = [0,rotorMy(i),0];
         momentWEIGHTMOTOR(:,1:3,i) = cross(rotpositionMOTOR(i,:),[0,0,-massMOTOR*9.81],2);
         momentWEIGHTARM(:,1:3,i) = cross(rotpositionARM(i,:),[0,0,-massARM*9.81],2);
         momentDRAGMOTOR(:,1:3,i) = cross(rotpositionMOTOR(i,:),[dragMOTOR,0,0],2);

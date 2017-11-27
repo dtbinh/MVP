@@ -32,7 +32,7 @@ Rotor Geometry and Properties
 Rotor type: 							geomTypeROTOR	="TMotor1Prediction2000"
 Number of rotors: 						geomNumROTORS 	= 4
 Rotor diameter [m]:						geomDIAMETER 	= 0.4572 (18")
-Number of blades:						geomNumBLADES 	= 2
+Number of blades:						geomNumBLADES 	= 1
 
 
 Vehicle Geometry [m]

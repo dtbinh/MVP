@@ -2,6 +2,8 @@ function [ valRPM, valPx_rho, valPy_rho, valMx_rho, valMy_rho, valCP, valCMx, va
 %UNTITLED7 Summary of this function goes here
 %   Detailed explanation goes here
 
+%flow q = 2.8
+%vecFORCES
 
 % interpolate for everything based on q and T
 for i = 1:length(vecRPM)
